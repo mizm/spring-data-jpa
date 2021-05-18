@@ -2,6 +2,7 @@ package study.datajpa.entity;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,11 +11,14 @@ import study.datajpa.repository.MemberRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@WebMvcTest
+//@SpringBootTest
 @Transactional
 @Rollback(value = false)
 class MemberTest {
@@ -25,6 +29,16 @@ class MemberTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @Test
+    void test() {
+        Team teamA = new Team("teamA");
+        em.persist(teamA);
+        Member member = new Member("member1", 10, teamA);
+
+        memberRepository.save(member);
+        LocalDateTime createdDate = member.getCreatedDate();
+        System.out.println("createdDate = " + createdDate);
+    }
     @Test
     void testEntity() {
         Team teamA = new Team("teamA");
